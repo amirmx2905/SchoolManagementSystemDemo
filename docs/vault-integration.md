@@ -2,11 +2,11 @@
 
 ## Secret Paths
 
-| Path | Contents |
-|------|----------|
-| `secret/db` | RDS host, name, username, password |
-| `secret/jwt` | JWT signing secret |
-| `secret/smtp` | SMTP host, user, password |
+| Path          | Contents                           |
+| ------------- | ---------------------------------- |
+| `secret/db`   | RDS host, name, username, password |
+| `secret/jwt`  | JWT signing secret                 |
+| `secret/smtp` | SMTP host, user, password          |
 
 ## Initialization
 
