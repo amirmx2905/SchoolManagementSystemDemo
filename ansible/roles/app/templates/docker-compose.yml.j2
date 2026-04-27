@@ -1,10 +1,8 @@
-version: "3.8"
-
 services:
   auth-service:
     image: node:18-alpine
     working_dir: /app
-    command: ["node", "index.js"]
+    command: ["sh", "-c", "echo 'auth-service placeholder running' && sleep infinity"]
     ports:
       - "3000:3000"
     environment:
@@ -18,7 +16,7 @@ services:
   notifications-service:
     image: node:18-alpine
     working_dir: /app
-    command: ["node", "index.js"]
+    command: ["sh", "-c", "echo 'notifications-service placeholder running' && sleep infinity"]
     ports:
       - "3003:3003"
     environment:

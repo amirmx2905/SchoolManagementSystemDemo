@@ -1,0 +1,13 @@
+# Placeholder values for docker-compose template.
+# db_password, jwt_secret, smtp_pass will be replaced with Vault-injected
+# values in Phase 6. Do NOT use these in any real environment.
+
+db_host: "school-mgmt-postgres.c10iko6skhan.us-east-1.rds.amazonaws.com"
+db_name: "school_mgmt"
+db_user: "school_admin"
+db_password: "CHANGE_ME_VAULT"
+jwt_secret: "CHANGE_ME_VAULT"
+
+smtp_host: "smtp.example.com"
+smtp_user: "notify@example.com"
+smtp_pass: "CHANGE_ME_VAULT"

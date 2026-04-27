@@ -18,4 +18,5 @@
   shell: docker compose up -d
   args:
     chdir: /opt/school-mgmt
-  become_user: ubuntu
+  become: true
+  changed_when: false
