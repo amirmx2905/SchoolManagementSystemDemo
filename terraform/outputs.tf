@@ -1,8 +1,3 @@
-output "alb_dns_name" {
-  description = "ALB public DNS — use this to reach the app"
-  value       = module.compute.alb_dns_name
-}
-
 output "app_instance_1_public_ip" {
   description = "EC2 App Instance 1 public IP"
   value       = module.compute.app_instance_1_public_ip

@@ -57,7 +57,5 @@ module "compute" {
   public_subnet_ids   = module.network.public_subnet_ids
   private_subnet_ids  = module.network.private_subnet_ids
   sg_ec2_id           = module.network.sg_ec2_id
-  sg_alb_id           = module.network.sg_alb_id
   sg_vault_id         = module.network.sg_vault_id
-  vpc_id              = module.network.vpc_id
 }

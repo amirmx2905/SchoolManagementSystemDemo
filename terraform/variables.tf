@@ -17,7 +17,7 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnet_cidrs" {
-  description = "Public subnet CIDRs (for ALB)"
+  description = "Public subnet CIDRs (for EC2 app instances)"
   type        = list(string)
   default     = ["10.0.1.0/24", "10.0.2.0/24"]
 }
@@ -41,15 +41,15 @@ variable "ami_id" {
 }
 
 variable "app_instance_type" {
-  description = "EC2 instance type for app servers"
+  description = "EC2 instance type for app servers (t3.micro = Free Tier eligible)"
   type        = string
-  default     = "t3.small"
+  default     = "t3.micro"
 }
 
 variable "vault_instance_type" {
-  description = "EC2 instance type for Vault server"
+  description = "EC2 instance type for Vault server (t3.micro = Free Tier eligible)"
   type        = string
-  default     = "t3.small"
+  default     = "t3.micro"
 }
 
 variable "key_name" {
