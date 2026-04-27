@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  auth-service:
+    image: node:18-alpine
+    working_dir: /app
+    command: ["node", "index.js"]
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: "{{ db_host }}"
+      DB_NAME: "{{ db_name }}"
+      DB_USER: "{{ db_user }}"
+      DB_PASSWORD: "{{ db_password }}"
+      JWT_SECRET: "{{ jwt_secret }}"
+    restart: unless-stopped
+
+  notifications-service:
+    image: node:18-alpine
+    working_dir: /app
+    command: ["node", "index.js"]
+    ports:
+      - "3003:3003"
+    environment:
+      SMTP_HOST: "{{ smtp_host }}"
+      SMTP_USER: "{{ smtp_user }}"
+      SMTP_PASS: "{{ smtp_pass }}"
+    restart: unless-stopped

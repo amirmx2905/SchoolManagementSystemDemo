@@ -1,0 +1,15 @@
+---
+- name: Configure app servers
+  hosts: app_servers
+  become: true
+  roles:
+    - common
+    - docker
+    - app
+
+- name: Configure Vault server
+  hosts: vault_server
+  become: true
+  roles:
+    - common
+    - vault

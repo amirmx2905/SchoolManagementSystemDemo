@@ -1,0 +1,21 @@
+---
+- name: Create app directory
+  file:
+    path: /opt/school-mgmt
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0755'
+
+- name: Deploy docker-compose.yml from template
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/school-mgmt/docker-compose.yml
+    owner: ubuntu
+    group: ubuntu
+
+- name: Start services with docker compose
+  shell: docker compose up -d
+  args:
+    chdir: /opt/school-mgmt
+  become_user: ubuntu

@@ -1,2 +1,20 @@
 docs/personalNotes
 docs/phases
+
+# Terraform state and secrets — never commit these
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# SSH keys
+*.pem
+*.key
+
+# Environment files
+.env
+.env.*
+
+# macOS
+.DS_Store
