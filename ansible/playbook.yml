@@ -31,25 +31,5 @@
   hosts: vault_server
   become: true
   gather_facts: false
-  pre_tasks:
-    - name: Bootstrap Python 3.9
-      raw: |
-        if command -v python3.9 >/dev/null 2>&1; then
-          exit 0
-        fi
-
-        while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
-          sleep 5
-        done
-
-        apt-get update -qq
-        DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
-        add-apt-repository -y ppa:deadsnakes/ppa
-        apt-get update -qq
-        DEBIAN_FRONTEND=noninteractive apt-get install -y python3.9
-      changed_when: false
-    - name: Gather facts
-      setup:
   roles:
-    - common
     - vault

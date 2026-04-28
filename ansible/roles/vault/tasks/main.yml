@@ -1,0 +1,104 @@
+---
+# Vault EC2 is in a private subnet with no internet access and no NAT gateway.
+# Ansible 2.20 requires Python 3.9 on managed nodes, but Python 3.9 cannot be
+# installed without internet. All remote tasks use 'raw' to bypass the Python
+# version requirement. The Vault binary is prepared on localhost and SCP'd via
+# ProxyCommand through app1.
+
+- name: Download Vault archive on controller
+  delegate_to: localhost
+  become: false
+  ansible.builtin.get_url:
+    url: https://releases.hashicorp.com/vault/1.17.0/vault_1.17.0_linux_amd64.zip
+    dest: /tmp/vault_1.17.0_linux_amd64.zip
+    mode: "0644"
+
+- name: Extract Vault binary on controller
+  delegate_to: localhost
+  become: false
+  ansible.builtin.shell: |
+    mkdir -p /tmp/vault_1.17.0_linux_amd64
+    unzip -o /tmp/vault_1.17.0_linux_amd64.zip vault -d /tmp/vault_1.17.0_linux_amd64
+    chmod +x /tmp/vault_1.17.0_linux_amd64/vault
+  args:
+    creates: /tmp/vault_1.17.0_linux_amd64/vault
+
+- name: Create vault group
+  raw: getent group vault || groupadd --system vault
+  changed_when: false
+
+- name: Create vault user
+  raw: id vault 2>/dev/null || useradd --system --gid vault --no-create-home --home /opt/vault --shell /sbin/nologin vault
+  changed_when: false
+
+- name: Create vault directories
+  raw: |
+    mkdir -p /opt/vault/data
+    chown -R vault:vault /opt/vault
+    chmod 750 /opt/vault/data
+  changed_when: false
+
+- name: Copy vault binary via SCP (ProxyCommand through app1)
+  delegate_to: localhost
+  become: false
+  ansible.builtin.shell: >
+    scp -i ~/.ssh/school_mgmt_key
+    -o StrictHostKeyChecking=no
+    -o ProxyCommand="ssh -i ~/.ssh/school_mgmt_key -o StrictHostKeyChecking=no -W %h:%p ubuntu@54.209.209.114"
+    /tmp/vault_1.17.0_linux_amd64/vault
+    ubuntu@10.0.3.114:/tmp/vault_binary
+
+- name: Install vault binary
+  raw: |
+    if [ ! -f /usr/local/bin/vault ]; then
+      mv /tmp/vault_binary /usr/local/bin/vault
+      chmod +x /usr/local/bin/vault
+    else
+      rm -f /tmp/vault_binary
+    fi
+  changed_when: false
+
+- name: Copy vault config via SCP (ProxyCommand through app1)
+  delegate_to: localhost
+  become: false
+  ansible.builtin.shell: >
+    scp -i ~/.ssh/school_mgmt_key
+    -o StrictHostKeyChecking=no
+    -o ProxyCommand="ssh -i ~/.ssh/school_mgmt_key -o StrictHostKeyChecking=no -W %h:%p ubuntu@54.209.209.114"
+    {{ playbook_dir }}/../vault/config.hcl
+    ubuntu@10.0.3.114:/tmp/vault_config.hcl
+
+- name: Install vault config
+  raw: |
+    mv /tmp/vault_config.hcl /opt/vault/config.hcl
+    chown vault:vault /opt/vault/config.hcl
+    chmod 640 /opt/vault/config.hcl
+  changed_when: false
+
+- name: Install vault systemd service
+  raw: |
+    cat > /etc/systemd/system/vault.service << 'UNITEOF'
+    [Unit]
+    Description=HashiCorp Vault
+    After=network.target
+
+    [Service]
+    User=vault
+    Group=vault
+    ExecStart=/usr/local/bin/vault server -config=/opt/vault/config.hcl
+    ExecReload=/bin/kill -HUP $MAINPID
+    Restart=on-failure
+    LimitNOFILE=65536
+    Environment=VAULT_ADDR=http://127.0.0.1:8200
+
+    [Install]
+    WantedBy=multi-user.target
+    UNITEOF
+  changed_when: false
+
+- name: Enable and start vault service
+  raw: |
+    systemctl daemon-reload
+    systemctl enable vault
+    systemctl start vault
+  changed_when: false

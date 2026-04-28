@@ -127,6 +127,14 @@ resource "aws_security_group" "vault" {
     cidr_blocks = [var.my_ip]
   }
 
+  # Allow SSH from app servers (EC2 SG) so Ansible can jump through app1
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ec2.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
