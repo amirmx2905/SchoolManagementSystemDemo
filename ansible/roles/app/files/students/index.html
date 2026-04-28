@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students Service — School Management System</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; }
+    header { background: #1a365d; color: white; padding: 1rem 2rem; }
+    header h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .badges { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
+    .green  { background: #48bb78; color: white; }
+    .purple { background: #6b46c1; color: white; }
+    .sub    { color: #90cdf4; font-size: 0.78rem; }
+    .container { max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .stats { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .stat { background: #edf2f7; border-radius: 6px; padding: 0.75rem 1.2rem; text-align: center; flex: 1; min-width: 100px; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; color: #2b6cb0; }
+    .stat-label { font-size: 0.75rem; color: #718096; margin-top: 0.2rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    th { text-align: left; padding: 0.5rem 0.6rem; background: #edf2f7; color: #4a5568; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 0.5rem 0.6rem; border-top: 1px solid #e2e8f0; color: #2d3748; }
+    td:first-child { font-weight: 600; color: #2b6cb0; }
+    .status-active   { color: #276749; background: #c6f6d5; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+    .status-inactive { color: #744210; background: #fefcbf; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
+    footer { text-align: center; color: #a0aec0; font-size: 0.78rem; padding: 2rem 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>School Management System</h1>
+    <div class="badges">
+      <span class="badge green">● Running</span>
+      <span class="badge purple">🔐 Vault-secured</span>
+      <span class="sub">Students Service &mdash; App2 :3001</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Student Overview</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-value">247</div><div class="stat-label">Total Students</div></div>
+        <div class="stat"><div class="stat-value">231</div><div class="stat-label">Active</div></div>
+        <div class="stat"><div class="stat-value">12</div><div class="stat-label">Enrolled This Week</div></div>
+        <div class="stat"><div class="stat-value">4</div><div class="stat-label">Graduated</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Student Directory</h2>
+      <table>
+        <tr><th>ID</th><th>Name</th><th>Email</th><th>Program</th><th>GPA</th><th>Status</th></tr>
+        <tr>
+          <td>#S-001</td><td>Ana García</td><td>ana.garcia@school.edu</td>
+          <td>Computer Science</td><td>3.8</td><td><span class="status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td>#S-002</td><td>Carlos Pérez</td><td>carlos.perez@school.edu</td>
+          <td>Software Engineering</td><td>3.5</td><td><span class="status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td>#S-003</td><td>Lucía Martínez</td><td>lucia.martinez@school.edu</td>
+          <td>Data Science</td><td>3.9</td><td><span class="status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td>#S-004</td><td>José Ramos</td><td>jose.ramos@school.edu</td>
+          <td>Cybersecurity</td><td>3.2</td><td><span class="status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td>#S-005</td><td>María López</td><td>maria.lopez@school.edu</td>
+          <td>Computer Science</td><td>2.9</td><td><span class="status-inactive">On Leave</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>API Endpoints</h2>
+      <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+        <tr><td>GET</td><td>/students</td><td>List all students</td></tr>
+        <tr><td>POST</td><td>/students</td><td>Register new student</td></tr>
+        <tr><td>GET</td><td>/students/:id</td><td>Get student by ID</td></tr>
+        <tr><td>PUT</td><td>/students/:id</td><td>Update student record</td></tr>
+        <tr><td>GET</td><td>/students/:id/grades</td><td>Get student grade history</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Infrastructure Details</h2>
+      <table>
+        <tr><th>Component</th><th>Value</th></tr>
+        <tr><td>EC2 Host</td><td>App2 — us-east-1b (public subnet)</td></tr>
+        <tr><td>Container</td><td>nginx:alpine serving this UI</td></tr>
+        <tr><td>Database</td><td>PostgreSQL 15 — private subnet</td></tr>
+        <tr><td>Secret source</td><td>HashiCorp Vault: secret/db</td></tr>
+        <tr><td>Provisioned by</td><td>Terraform + Ansible</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <footer>School Management System Demo &mdash; DevOps College Project &mdash; AWS us-east-1</footer>
+</body>
+</html>

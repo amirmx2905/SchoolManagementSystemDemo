@@ -7,15 +7,50 @@
     group: ubuntu
     mode: "0755"
 
-- name: Deploy docker-compose.yml from template
+- name: Create HTML directories for all services
+  file:
+    path: "/opt/school-mgmt/html/{{ item }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+  loop:
+    - auth
+    - students
+    - courses
+    - notifications
+
+- name: Copy HTML files for all services
+  copy:
+    src: "{{ item }}/index.html"
+    dest: "/opt/school-mgmt/html/{{ item }}/index.html"
+    owner: ubuntu
+    group: ubuntu
+    mode: "0644"
+  loop:
+    - auth
+    - students
+    - courses
+    - notifications
+
+- name: Deploy docker-compose.yml from template (app1)
   template:
     src: docker-compose.yml.j2
     dest: /opt/school-mgmt/docker-compose.yml
     owner: ubuntu
     group: ubuntu
+  when: inventory_hostname == 'app1'
+
+- name: Deploy docker-compose.yml from template (app2)
+  template:
+    src: docker-compose-app2.yml.j2
+    dest: /opt/school-mgmt/docker-compose.yml
+    owner: ubuntu
+    group: ubuntu
+  when: inventory_hostname == 'app2'
 
 - name: Start services with docker compose
-  shell: docker compose up -d
+  shell: docker compose up -d --force-recreate
   args:
     chdir: /opt/school-mgmt
   become: true

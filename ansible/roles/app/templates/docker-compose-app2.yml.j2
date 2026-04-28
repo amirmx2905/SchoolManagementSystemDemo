@@ -1,12 +1,4 @@
 services:
-  auth-service:
-    image: nginx:alpine
-    ports:
-      - "3000:80"
-    volumes:
-      - /opt/school-mgmt/html/auth:/usr/share/nginx/html:ro
-    restart: unless-stopped
-
   students-service:
     image: nginx:alpine
     ports:
@@ -21,12 +13,4 @@ services:
       - "3002:80"
     volumes:
       - /opt/school-mgmt/html/courses:/usr/share/nginx/html:ro
-    restart: unless-stopped
-
-  notifications-service:
-    image: nginx:alpine
-    ports:
-      - "3003:80"
-    volumes:
-      - /opt/school-mgmt/html/notifications:/usr/share/nginx/html:ro
     restart: unless-stopped
